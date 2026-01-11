@@ -1,0 +1,123 @@
+/* Global reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Background with cloud/devops feel */
+body {
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:
+        linear-gradient(120deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)),
+        url("https://images.unsplash.com/photo-1581091870627-3a4f1c1f0b7c");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+}
+
+/* Glassmorphism card */
+.container {
+    width: 70%;
+    max-width: 800px;
+    padding: 50px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    animation: zoomIn 1.5s ease;
+}
+
+/* Headline animation */
+.animate-text {
+    font-size: 46px;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 2s infinite;
+}
+
+/* Sub headline */
+.fade-in {
+    margin-top: 15px;
+    font-size: 28px;
+    color: #e0e0e0;
+    opacity: 0;
+    animation: fadeIn 2s forwards;
+    animation-delay: 1s;
+}
+
+/* Description text */
+.slide-up {
+    margin-top: 25px;
+    font-size: 18px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: slideUp 2s forwards;
+    animation-delay: 2s;
+}
+
+/* Highlight keywords */
+.highlight {
+    color: #00eaff;
+    font-weight: 600;
+}
+
+/* CI/CD badge */
+.badge {
+    margin-top: 35px;
+    padding: 12px 28px;
+    display: inline-block;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.8);
+    animation: glow 1.5s infinite alternate;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 10px rgba(0, 198, 255, 0.6); }
+    to { box-shadow: 0 0 25px rgba(0, 198, 255, 1); }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
