@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = "springboot-app"
-        JAR_PATH = "target/*.jar"
         APP_PORT = "8081"
+        BUILD_DIR = "target"
     }
 
     stages {
@@ -25,11 +24,21 @@ pipeline {
         stage('Deploy on Ubuntu Instance') {
             steps {
                 sh '''
-                echo "Stopping existing application if running..."
-                pkill -f ${APP_NAME} || true
+                echo "Finding generated JAR..."
+                JAR_FILE=$(ls target/*.jar | grep -v original | head -n 1)
 
-                echo "Starting Spring Boot application..."
-                nohup java -jar ${JAR_PATH} \
+                if [ -z "$JAR_FILE" ]; then
+                  echo "❌ JAR file not found!"
+                  exit 1
+                fi
+
+                echo "JAR found: $JAR_FILE"
+
+                echo "Stopping existing application (if any)..."
+                pkill -f "$JAR_FILE" || true
+
+                echo "Starting application on port ${APP_PORT}..."
+                nohup java -jar "$JAR_FILE" \
                     --server.port=${APP_PORT} \
                     > app.log 2>&1 &
                 '''
@@ -42,7 +51,7 @@ pipeline {
             echo "✅ Application deployed successfully on port ${APP_PORT}"
         }
         failure {
-            echo "❌ Deployment failed"
+            echo "❌ Pipeline failed"
         }
     }
 }
