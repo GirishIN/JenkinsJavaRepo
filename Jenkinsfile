@@ -5,11 +5,6 @@ pipeline {
         APP_PORT = "8081"
         BUILD_DIR = "target"
     }
-
-    tools {
-        jdk 'jdk-21'
-    }
-
     stages {
 
         stage('Fetch from GitHub') {
