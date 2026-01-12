@@ -5,7 +5,7 @@ pipeline {
         APP_PORT = "8081"
         APP_DIR  = "/opt/springboot"
         JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
-    }
+    } 
 
     stages {
 
