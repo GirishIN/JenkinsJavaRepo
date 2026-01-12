@@ -3,8 +3,9 @@ pipeline {
 
     environment {
         APP_PORT = "8081"
-        BUILD_DIR = "target"
+        APP_DIR  = "/opt/springboot"
     }
+
     stages {
 
         stage('Fetch from GitHub') {
@@ -23,23 +24,19 @@ pipeline {
         stage('Deploy on Ubuntu Instance') {
             steps {
                 sh '''
-                echo "Finding generated JAR..."
                 JAR_FILE=$(ls target/*.jar | grep -v original | head -n 1)
+                [ -z "$JAR_FILE" ] && exit 1
 
-                if [ -z "$JAR_FILE" ]; then
-                  echo "❌ JAR file not found!"
-                  exit 1
-                fi
+                mkdir -p ${APP_DIR}
 
-                echo "JAR found: $JAR_FILE"
+                pkill -f ${APP_DIR}/app.jar || true
 
-                echo "Stopping existing application (if any)..."
-                pkill -f "$JAR_FILE" || true
+                cp "$JAR_FILE" ${APP_DIR}/app.jar
 
-                echo "Starting application on port ${APP_PORT}..."
-                nohup java -jar "$JAR_FILE" \
-                    --server.port=${APP_PORT} \
-                    > app.log 2>&1 &
+                nohup java -jar ${APP_DIR}/app.jar \
+                  --server.port=${APP_PORT} \
+                  --server.address=0.0.0.0 \
+                  > ${APP_DIR}/app.log 2>&1 &
                 '''
             }
         }
