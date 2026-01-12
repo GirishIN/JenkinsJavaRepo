@@ -6,6 +6,10 @@ pipeline {
         BUILD_DIR = "target"
     }
 
+    tools {
+        jdk 'jdk-21'
+    }
+
     stages {
 
         stage('Fetch from GitHub') {
