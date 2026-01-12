@@ -4,6 +4,7 @@ pipeline {
     environment {
         APP_PORT = "8081"
         APP_DIR  = "/opt/springboot"
+        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
     }
 
     stages {
@@ -22,26 +23,27 @@ pipeline {
         }
 
         stage('Deploy on Ubuntu Instance') {
-    steps {
-        sh '''
-        JAR_FILE=$(ls target/*.jar | grep -v original | head -n 1)
-        [ -z "$JAR_FILE" ] && exit 1
+            steps {
+                sh '''
+                set -e
 
-        APP_DIR=/opt/springboot
-        JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-        PATH=$JAVA_HOME/bin:$PATH
+                JAR_FILE=$(ls target/*.jar | grep -v original | head -n 1)
+                [ -z "$JAR_FILE" ] && exit 1
 
-        pkill -f $APP_DIR/app.jar || true
+                export PATH=$JAVA_HOME/bin:$PATH
 
-        cp "$JAR_FILE" $APP_DIR/app.jar
+                pkill -f ${APP_DIR}/app.jar || true
 
-        nohup $JAVA_HOME/bin/java -jar $APP_DIR/app.jar \
-          --server.port=8081 \
-          --server.address=0.0.0.0 \
-          > $APP_DIR/app.log 2>&1 &
-        '''
+                cp "$JAR_FILE" ${APP_DIR}/app.jar
+
+                nohup ${JAVA_HOME}/bin/java -jar ${APP_DIR}/app.jar \
+                  --server.port=${APP_PORT} \
+                  --server.address=0.0.0.0 \
+                  > ${APP_DIR}/app.log 2>&1 &
+                '''
+            }
+        }
     }
-}
 
     post {
         success {
